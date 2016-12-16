@@ -136,7 +136,7 @@ const float NJKFinalProgressValue = 0.9f;
         [webView stringByEvaluatingJavaScriptFromString:waitForCompleteJS];
     }
     
-    BOOL isNotRedirect = _currentURL && [_currentURL isEqual:webView.request.mainDocumentURL];
+    BOOL isNotRedirect = [self webView:webView isNoRedirect:_currentURL];
     BOOL complete = [readyState isEqualToString:@"complete"];
     if (complete && isNotRedirect) {
         [self completeProgress];
@@ -161,12 +161,32 @@ const float NJKFinalProgressValue = 0.9f;
         [webView stringByEvaluatingJavaScriptFromString:waitForCompleteJS];
     }
     
-    BOOL isNotRedirect = _currentURL && [_currentURL isEqual:webView.request.mainDocumentURL];
+    BOOL isNotRedirect = [self webView:webView isNoRedirect:_currentURL];
     BOOL complete = [readyState isEqualToString:@"complete"];
     if ((complete && isNotRedirect) || error) {
         [self completeProgress];
     }
 }
+
+
+-(BOOL)webView:(UIWebView*)webView isNoRedirect:(NSURL*)url
+{
+    BOOL isNotRedirect = YES;
+    
+    if (url && url.fragment) {
+        NSString *nonFragmentCurrentURL = [url.absoluteString stringByReplacingOccurrencesOfString:[@"#" stringByAppendingString:url.fragment] withString:@""];
+        NSString *nonFragmentMainDocumentURL = nonFragmentCurrentURL;
+        
+        if (webView.request.mainDocumentURL.fragment) {
+            nonFragmentMainDocumentURL = [webView.request.mainDocumentURL.absoluteString stringByReplacingOccurrencesOfString:[@"#" stringByAppendingString:webView.request.mainDocumentURL.fragment] withString:@""];
+        }
+        
+        isNotRedirect = url && [nonFragmentCurrentURL isEqual:nonFragmentMainDocumentURL];
+    }
+
+    return isNotRedirect;
+}
+
 
 #pragma mark - 
 #pragma mark Method Forwarding
