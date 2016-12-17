@@ -22,7 +22,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TOWebViewController : UIViewController <UIWebViewDelegate>
+#import "NJKWebViewProgress.h"
+
+@interface TOWebViewController : UIViewController <UIWebViewDelegate, NJKWebViewProgressDelegate>
 
 /**
  Initializes a new `TOWebViewController` object with the specified URL.

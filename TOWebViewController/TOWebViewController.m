@@ -25,7 +25,7 @@
 #import "TOActivityChrome.h"
 #import "UIImage+TOWebViewControllerIcons.h"
 
-#import "NJKWebViewProgress.h"
+
 #import "NJKWebViewProgressView.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -64,7 +64,7 @@
                                    UIPopoverControllerDelegate,
                                    MFMailComposeViewControllerDelegate,
                                    MFMessageComposeViewControllerDelegate,
-                                   NJKWebViewProgressDelegate,CAAnimationDelegate>
+                                   CAAnimationDelegate>
 {
     
     //The state of the UIWebView's scroll view before the rotation animation has started
