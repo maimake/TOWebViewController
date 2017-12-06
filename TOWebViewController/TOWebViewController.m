@@ -1,7 +1,7 @@
 //
 //  TOWebViewController.m
 //
-//  Copyright 2013-2016 Timothy Oliver. All rights reserved.
+//  Copyright 2013-2017 Timothy Oliver. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to
@@ -53,10 +53,10 @@
 #define NAVIGATION_ICON_SPACING             25
 
 /* Toolbar Properties */
-#define TOOLBAR_HEIGHT      44.0f
+#define TOOLBAR_HEIGHT ((CGFloat)44.f)
 
 /* Hieght of the loading progress bar view */
-#define LOADING_BAR_HEIGHT          2
+#define LOADING_BAR_HEIGHT ((CGFloat)2.f)        
 
 #pragma mark -
 #pragma mark Hidden Properties/Methods
@@ -264,7 +264,7 @@
     self.webView.opaque = YES;
     [self.view addSubview:self.webView];
 
-    CGFloat progressBarHeight = 2.f;
+    CGFloat progressBarHeight = LOADING_BAR_HEIGHT;
     CGRect navigationBarBounds = self.navigationController.navigationBar.bounds;
     CGRect barFrame = CGRectMake(0, navigationBarBounds.size.height - progressBarHeight, navigationBarBounds.size.width, progressBarHeight);
     self.progressView = [[NJKWebViewProgressView alloc] initWithFrame:barFrame];
@@ -559,7 +559,7 @@
             if (self.actionButton)      { [items addObject:self.actionButton]; }
         }
         
-        UIBarButtonItem *(^flexibleSpace)() = ^{
+        UIBarButtonItem *(^flexibleSpace)(void) = ^{
             return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         };
         
@@ -792,6 +792,13 @@
     //TODO: Implement TOModalWebViewController Delegate callback
     
     return shouldStart;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    //If a request handler has been set, check to see if we should go ahead
+    if (self.didFailLoadWithErrorRequestHandler)
+        return self.didFailLoadWithErrorRequestHandler(error);
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
